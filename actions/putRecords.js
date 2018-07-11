@@ -34,6 +34,12 @@ module.exports = function putRecords(store, data, cb) {
           hashKey = db.partitionKeyToHashKey(record.PartitionKey)
         }
 
+        if((Math.random() * 100) <= store.putFailureRate) {
+          return cb(db.clientError('ProvisionedThroughputExceededException',
+          'Rate exceeded for shard ' + store.shardId + ' in stream ' + shard.streamName +
+          ' under account ' + metaDb.awsAccountId + '. Record: ' + record.Data))
+        }
+
         for (var j = 0; j < stream.Shards.length; j++) {
           if (stream.Shards[j].SequenceNumberRange.EndingSequenceNumber == null &&
               hashKey.comparedTo(stream.Shards[j].HashKeyRange.StartingHashKey) >= 0 &&

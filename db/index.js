@@ -27,6 +27,7 @@ function create(options) {
   if (options.deleteStreamMs == null) options.deleteStreamMs = 500
   if (options.updateStreamMs == null) options.updateStreamMs = 500
   if (options.shardLimit == null) options.shardLimit = 10
+  if (options.putFailureRate == null) options.putFailureRate = 0
 
   var db = levelup(options.path ? require('leveldown')(options.path) : memdown()),
       sublevelDb = sublevel(db),
@@ -84,6 +85,7 @@ function create(options) {
     deleteStreamMs: options.deleteStreamMs,
     updateStreamMs: options.updateStreamMs,
     shardLimit: options.shardLimit,
+    putFailureRate: options.putFailureRate,
     db: db,
     metaDb: metaDb,
     getStreamDb: getStreamDb,

@@ -41,6 +41,12 @@ module.exports = function putRecord(store, data, cb) {
         }
       }
 
+      if((Math.random() * 100) <= store.putFailureRate) {
+        return cb(db.clientError('ProvisionedThroughputExceededException',
+        'Rate exceeded for shard ' + store.shardId + ' in stream ' + shard.streamName +
+        ' under account ' + metaDb.awsAccountId + '. Record: ' + data.Data))
+      }
+
       for (var i = 0; i < stream.Shards.length; i++) {
         if (stream.Shards[i].SequenceNumberRange.EndingSequenceNumber == null &&
             hashKey.comparedTo(stream.Shards[i].HashKeyRange.StartingHashKey) >= 0 &&
