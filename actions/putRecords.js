@@ -36,7 +36,7 @@ module.exports = function putRecords(store, data, cb) {
 
         if((Math.random() * 100) <= store.putFailureRate) {
           return cb(db.clientError('ProvisionedThroughputExceededException',
-          'Rate exceeded for shard ' + store.shardId + ' in stream ' + shard.streamName +
+          'Rate exceeded for shard ' + store.shardId + ' in stream ' + data.StreamName +
           ' under account ' + metaDb.awsAccountId + '. Record: ' + record.Data))
         }
 
