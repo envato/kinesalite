@@ -42,9 +42,10 @@ module.exports = function putRecord(store, data, cb) {
       }
 
       if((Math.random() * 100) <= store.putFailureRate) {
+        var decodedData = Buffer.from(data.Data, 'base64');
         return cb(db.clientError('ProvisionedThroughputExceededException',
         'Rate exceeded for shard ' + store.shardId + ' in stream ' + data.StreamName +
-        ' under account ' + metaDb.awsAccountId + '. Record: ' + data.Data))
+        ' under account ' + metaDb.awsAccountId + '. Record: ' + decodedData))
       }
 
       for (var i = 0; i < stream.Shards.length; i++) {
